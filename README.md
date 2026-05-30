@@ -19,16 +19,40 @@ The engine is divided into two layers:
 
 ## Building
 
-### Build the Static Library
+The project uses CMake with [presets](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html). You need CMake 3.20+ and a C++20 compiler (clang++ is configured by default).
+
+### Debug
+
+Configure, build, and run tests:
+
 ```bash
-./src/build.sh
+cmake --preset debug
+cmake --build --preset debug
+./build/debug/bin/test_main
 ```
 
-This compiles the engine into `lib/libspinlock.a`.
+Artifacts:
 
-### Compile and Run Tests
+- Static library: `build/debug/lib/libspinlock.a`
+- Test executable: `build/debug/bin/test_main`
+
+### Release
+
 ```bash
-clang++ -std=c++20 -I./src test/test_main.cpp -L./lib -lspinlock -o build/test_main && ./build/test_main
+cmake --preset release
+cmake --build --preset release
+./build/release/bin/test_main
 ```
 
-This compiles the test executable and links it against the engine library, placing the executable in the `build/` directory.
+Artifacts:
+
+- Static library: `build/release/lib/libspinlock.a`
+- Test executable: `build/release/bin/test_main`
+
+### Editor support
+
+After configuring Debug, point your language server at the generated compile commands:
+
+```bash
+ln -sf build/debug/compile_commands.json compile_commands.json
+```
